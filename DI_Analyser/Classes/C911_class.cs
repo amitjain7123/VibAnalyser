@@ -487,7 +487,7 @@ namespace Analyser.Classes
                     ExportDatainTextFile("Mode_S", XData, YData);
 
                     YData_V = Calculate_ModeV(YData, "Mode_S");
-                    ExportDatainTextFile("Mode_V", XData, YData_S);
+                    ExportDatainTextFile("Mode_V", XData, YData_V);
 
                     YData_A = Calculate_ModeA(YData, "Mode_S");
                     ExportDatainTextFile("Mode_A", XData, YData_A);
@@ -525,7 +525,7 @@ namespace Analyser.Classes
                         ExportDatainTextFile("Mode_S_Ch2", XData, YData2);
 
                         YData_V2 = Calculate_ModeV(YData2, "Mode_S");
-                        ExportDatainTextFile("Mode_V_Ch2", XData, YData_S2);
+                        ExportDatainTextFile("Mode_V_Ch2", XData, YData_V2);
 
                         YData_A2 = Calculate_ModeA(YData2, "Mode_S");
                         ExportDatainTextFile("Mode_A_Ch2", XData, YData_A2);
@@ -816,7 +816,8 @@ namespace Analyser.Classes
                     YData[i] = Convert.ToDouble(fabc);
                     //CH1.Add(fabc);
                     CtrToStart += 4;
-
+                    if(CtrToStart>MainArr.Length)
+                    { break; }
                 }
 
                 if (Is2Channel)
@@ -995,17 +996,20 @@ namespace Analyser.Classes
                 
                 if(_Measurement==0) // For Time
                 {
-                    Number_Of_Spectrum = 1 << _pwr2;
+                    HighestFrequency = 1 / _dF;
+                    Number_Of_Spectrum = 1 << (_pwr2);
                     _IsTimeData = true;
+                    dF = HighestFrequency / Number_Of_Spectrum;
                 }
                 else if (_Measurement == 1) // For FFT
                 {
                     _dF = Math.Round(_dF, 3);
                     Number_Of_Spectrum = (1 << (_pwr2 - 6)) * 25;
                     _IsTimeData = false;
+                    HighestFrequency = dF * Number_Of_Spectrum;
                 }
 
-                HighestFrequency = dF * Number_Of_Spectrum;
+                
                 XData = new double[Number_Of_Spectrum];
                 for (int i = 0; i < Number_Of_Spectrum; i++)
                 {

@@ -27342,6 +27342,7 @@ namespace DI_Analyser
             {
                 do
                 {
+                    if(parentNode==null){ break; }
                     temp += parentNode.GetDisplayText(0);
                     temp += "<>";
                     parentNode = parentNode.ParentNode;
